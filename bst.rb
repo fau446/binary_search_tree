@@ -28,17 +28,34 @@ class Tree
     root
   end
 
+  def insert(value, node = @root) 
+    return if value == node.data
+
+    if value < node.data
+      if node.left_child == nil
+        node.left_child = Node.new(value)
+      else
+        insert(value, node.left_child)
+      end
+    else
+      if node.right_child == nil
+        node.right_child = Node.new(value)
+      else
+        insert(value, node.right_child)
+      end
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
   end
 end
-# 1 2 3 4 5 6 7 8 9
-# Comparable module?
 
-#arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+#arr = []
 #arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-#arr.uniq!
-#tree = Tree.new(arr)
-#tree.pretty_print
+tree = Tree.new(arr)
+tree.insert(0)
+p tree.pretty_print
