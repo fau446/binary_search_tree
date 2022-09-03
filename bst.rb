@@ -46,16 +46,55 @@ class Tree
     end
   end
 
+  def delete(value, node = @root)
+
+    if value < node.data
+      node.left_child = delete(value, node.left_child)
+    elsif value > node.data
+      node.right_child = delete(value, node.right_child)
+    else
+      if node.left_child.nil?
+        temp = node.right_child
+        node = nil
+        return temp
+      elsif node.right_child.nil?
+        temp = node.left_child
+        node = nil
+        return temp
+      end
+
+      temp = min_value_node(node.right_child)
+      node.data = temp.data
+      node.right_child = delete(temp.data, node.right_child)
+    end
+
+    node
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
   end
+
+  private
+
+  def min_value_node(node)
+    # leftmost is our smallest value
+    current_node = node
+    until current_node.left_child.nil?
+      current_node = current_node.left_child
+    end
+
+    current_node
+  end
 end
 
-arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-#arr = []
-#arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-tree = Tree.new(arr)
-tree.insert(0)
-p tree.pretty_print
+# arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+# #arr = [1, 2, 3]
+# #arr = []
+# #arr = [1, 2, 3, 4, 5, 6, 7, 8, 10]
+# tree = Tree.new(arr)
+# tree.pretty_print
+# tree.delete(9)
+# tree.pretty_print
