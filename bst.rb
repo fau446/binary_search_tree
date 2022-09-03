@@ -71,6 +71,14 @@ class Tree
     node
   end
 
+  def find(value, node = @root)
+    return if node == nil
+    return node if value == node.data
+
+    find(value, node.left_child)
+    find(value, node.right_child)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -96,5 +104,5 @@ end
 # #arr = [1, 2, 3, 4, 5, 6, 7, 8, 10]
 # tree = Tree.new(arr)
 # tree.pretty_print
-# tree.delete(9)
 # tree.pretty_print
+# p tree.find(634)
