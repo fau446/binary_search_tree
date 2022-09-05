@@ -12,6 +12,7 @@ class Tree
   attr_accessor :size, :root
 
   def initialize(arr)
+    arr.uniq!.sort! unless arr.empty?
     @size = arr.length
     @root = build_tree(arr, 0, size-1)
   end
@@ -79,6 +80,21 @@ class Tree
     find(value, node.right_child)
   end
 
+  def level_order
+    return nil unless block_given?
+    return nil if self.root.nil?
+
+    queue = []
+    queue.push(self.root)
+
+    until queue.empty?
+      current_node = queue.shift
+      queue.push(current_node.left_child) unless current_node.left_child.nil?
+      queue.push(current_node.right_child) unless current_node.right_child.nil?
+      yield(current_node)
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -98,11 +114,10 @@ class Tree
   end
 end
 
-# arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 # #arr = [1, 2, 3]
-# #arr = []
+# arr = []
 # #arr = [1, 2, 3, 4, 5, 6, 7, 8, 10]
-# tree = Tree.new(arr)
-# tree.pretty_print
-# tree.pretty_print
-# p tree.find(634)
+tree = Tree.new(arr)
+#tree.pretty_print
+tree.level_order { |node| puts node.data }
