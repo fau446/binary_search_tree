@@ -12,7 +12,7 @@ class Tree
   attr_accessor :size, :root
 
   def initialize(arr)
-    arr.uniq.sort! unless arr.empty?
+    arr = arr.uniq.sort! unless arr.empty?
     @size = arr.length
     @root = build_tree(arr, 0, size-1)
   end
@@ -140,6 +140,14 @@ class Tree
     end
   end
 
+  def height(node = @root)
+    return 0 if node.nil?
+
+    left_height = height(node.left_child)
+    right_height = height(node.right_child)
+    [left_height, right_height].max + 1
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -159,10 +167,9 @@ class Tree
   end
 end
 
-#arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-arr = [1, 2, 3, 4, 5]
+arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+#arr = [1, 2, 3, 4, 5]
 # arr = []
 # #arr = [1, 2, 3, 4, 5, 6, 7, 8, 10]
 tree = Tree.new(arr)
-tree.pretty_print
-p tree.inorder #{ |node| puts node.data }
+#p tree.height(root.left_child) #{ |node| puts node.data }
