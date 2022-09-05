@@ -95,6 +95,21 @@ class Tree
     end
   end
 
+  def preorder(root = @root, &block)
+    return if root.nil?
+    if block_given?
+      yield(root)
+      preorder(root.left_child, &block)
+      preorder(root.right_child, &block)
+    else
+      arr = []
+      arr.push(root.data)
+      arr.push(preorder(root.left_child)).flatten!
+      arr.push(preorder(root.right_child)).flatten!
+      arr.compact
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -119,5 +134,5 @@ arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 # arr = []
 # #arr = [1, 2, 3, 4, 5, 6, 7, 8, 10]
 tree = Tree.new(arr)
-#tree.pretty_print
-tree.level_order { |node| puts node.data }
+tree.pretty_print
+p tree.preorder
