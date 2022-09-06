@@ -167,6 +167,15 @@ class Tree
     nil
   end
 
+  def balanced?(root = @root)
+    left_height = height(root.left_child)
+    right_height = height(root.right_child)
+    height_diff = [left_height, right_height].max - [left_height, right_height].min
+    
+    return false if height_diff > 1
+    true
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -191,4 +200,3 @@ arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 # arr = []
 # #arr = [1, 2, 3, 4, 5, 6, 7, 8, 10]
 tree = Tree.new(arr)
-#p tree.height(root.left_child) #{ |node| puts node.data }
