@@ -176,6 +176,13 @@ class Tree
     true
   end
 
+  def rebalance(root = @root)
+    new_arr = inorder(root)
+    new_arr = new_arr.uniq.sort
+    @size = new_arr.length
+    @root = build_tree(new_arr, 0, size - 1)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -195,8 +202,22 @@ class Tree
   end
 end
 
-arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-#arr = [1, 2, 3, 4, 5]
-# arr = []
-# #arr = [1, 2, 3, 4, 5, 6, 7, 8, 10]
+arr = Array.new(15) { rand(1..100) }
+p arr
 tree = Tree.new(arr)
+tree.pretty_print
+p "Is the tree balanced?: #{tree.balanced?}"
+p "Preorder: #{tree.preorder}"
+p "Inorder: #{tree.inorder}"
+p "Postorder: #{tree.postorder}"
+tree.insert(1009)
+tree.insert(102)
+tree.insert(103)
+tree.pretty_print
+p "Is the tree balanced?: #{tree.balanced?}"
+tree.rebalance
+tree.pretty_print
+p "Is the tree balanced?: #{tree.balanced?}"
+p "Preorder: #{tree.preorder}"
+p "Inorder: #{tree.inorder}"
+p "Postorder: #{tree.postorder}"
